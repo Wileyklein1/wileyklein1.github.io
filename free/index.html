@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free Etsy Profit Calculator — LedgerLane</title>
+<meta name="description" content="A free spreadsheet that shows your real net profit and margin after every Etsy, Shopify, Amazon, and eBay fee. Enter your name and email to download it instantly." />
+<style>
+  :root{
+    --ink:#1F2A44; --teal:#2FA39B; --gold:#E8B04B; --mist:#F4F6F8;
+    --card:#FFFFFF; --pale-gold:#FFF7E6; --green:#1E7F5C; --red:#C0392B;
+    --muted:#6B7280; --line:#D6DCE4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--mist);line-height:1.55}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:var(--teal);text-decoration:none}
+
+  /* Top bar */
+  header.bar{background:var(--ink);color:#fff}
+  header.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:26px;letter-spacing:.2px}
+  .logo span{color:var(--gold)}
+  header.bar .tag{color:#B9C2D0;font-size:14.5px}
+
+  /* Hero + capture, two columns */
+  .hero{background:linear-gradient(180deg,#1F2A44 0%,#26324f 100%);color:#fff;padding:56px 0 64px}
+  .hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center}
+  .pill{display:inline-block;background:var(--gold);color:var(--ink);font-weight:700;font-size:12.5px;
+    letter-spacing:.5px;border-radius:999px;padding:6px 14px;margin-bottom:18px}
+  .hero h1{font-size:40px;line-height:1.12;margin-bottom:16px}
+  .hero h1 em{color:var(--gold);font-style:normal}
+  .hero p.sub{font-size:18.5px;color:#C7D0DE;margin-bottom:22px}
+  ul.benefits{list-style:none;margin:0 0 8px}
+  ul.benefits li{padding:7px 0 7px 30px;position:relative;color:#E7ECF3;font-size:16px}
+  ul.benefits li::before{content:"✓";position:absolute;left:0;top:7px;color:var(--teal);font-weight:700;font-size:17px}
+  .trust{margin-top:16px;color:#95A2B8;font-size:14px}
+  .trust b{color:#E7ECF3}
+
+  /* Capture card */
+  .capture{background:var(--card);color:var(--ink);border-radius:16px;padding:26px 26px 24px;
+    box-shadow:0 18px 40px rgba(0,0,0,.28)}
+  .capture .preview{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:18px;background:var(--mist)}
+  .capture .preview img{width:100%;display:block}
+  .capture h2{font-size:21px;margin-bottom:4px}
+  .capture p.lead{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+  .capture label{display:block;font-size:13px;font-weight:600;margin:10px 0 5px}
+  .capture input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:12px 13px;font-size:15px;font-family:inherit}
+  .capture input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(47,163,155,.15)}
+  .capture button{width:100%;margin-top:16px;background:var(--gold);color:var(--ink);font-weight:700;font-size:16.5px;
+    border:none;border-radius:11px;padding:14px;cursor:pointer}
+  .capture button:hover{filter:brightness(1.05)}
+  .capture .fineprint{color:var(--muted);font-size:12px;margin-top:11px;text-align:center}
+
+  /* Also get band */
+  .also{padding:52px 0 8px}
+  .also .box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px 32px;
+    display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+  .also h2{font-size:25px;margin-bottom:8px}
+  .also p{color:var(--muted);font-size:16px}
+  .also .tiers{background:var(--mist);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .also .tier{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+  .also .tier:last-child{border-bottom:none}
+  .also .tier .n{font-weight:600;font-size:15px}
+  .also .tier .n small{display:block;color:var(--muted);font-weight:400;font-size:12.5px}
+  .also .tier .p{font-weight:700;font-size:19px}
+  .also .tier.best .p{color:var(--teal)}
+
+  /* Steps */
+  .steps{padding:44px 0 8px}
+  .steps .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .step .num{width:34px;height:34px;border-radius:9px;background:var(--pale-gold);color:#9a7413;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:11px}
+  .step h3{font-size:16.5px;margin-bottom:5px}
+  .step p{color:var(--muted);font-size:14.5px}
+
+  /* Footer */
+  footer{background:var(--ink);color:#95A2B8;margin-top:56px;padding:36px 0 30px}
+  footer .logo{color:#fff;margin-bottom:8px}
+  footer .fine{font-size:13.5px;max-width:620px}
+  .disc{color:#6f7d97;font-size:12.5px;margin-top:16px;border-top:1px solid #2c3959;padding-top:14px}
+
+  @media(max-width:880px){
+    .hero .grid,.also .box{grid-template-columns:1fr}
+    .steps .grid{grid-template-columns:1fr}
+    .hero h1{font-size:32px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="logo">Ledger<span>Lane</span></div>
+    <div class="tag">Practical tools for solo online sellers</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="grid">
+
+      <div>
+        <span class="pill">FREE DOWNLOAD · XLSX</span>
+        <h1>Find out what an Etsy sale <em>actually</em> makes you.</h1>
+        <p class="sub">Grab the free LedgerLane Profit Calculator. Type in your cost and price, and it instantly subtracts every marketplace and payment fee to show your real net profit and margin — before you sell at a loss.</p>
+        <ul class="benefits">
+          <li>Net profit &amp; true margin after every fee, instantly</li>
+          <li>Works for Etsy, Shopify, Amazon Handmade &amp; eBay</li>
+          <li>Break-even price + a plain-English health check</li>
+          <li>Opens in Excel or Google Sheets — nothing to install</li>
+        </ul>
+        <div class="trust">Free · <b>No credit card</b> · Instant download · Built by sellers, for sellers</div>
+        <div style="margin-top:16px"><a href="/calculator/" style="color:var(--gold);font-weight:600;font-size:15px">Prefer not to download? Try the free calculator right in your browser →</a></div>
+      </div>
+
+      <!-- ============================================================
+           EMAIL CAPTURE FORM  —  full wiring guide: WIRING.md (same folder)
+           Works RIGHT NOW with no backend: on submit the visitor is sent to
+           thanks.html, which auto-downloads the free calculator — so the
+           funnel delivers even before you connect an email provider.
+           To ALSO capture the email into your list, paste your ESP / form
+           endpoint into data-esp-action below (ConvertKit / MailerLite /
+           Mailchimp / Formspree all work). The script then posts to it in the
+           background and still delivers the file. Step-by-step in WIRING.md.
+      ============================================================ -->
+      <form class="capture" id="capture-form" method="post"
+            action="#"
+            data-esp-action=""
+            data-deliver="thanks.html">
+        <div class="preview">
+          <img src="mockup-1-hero.png" alt="Free Etsy Profit Calculator preview" />
+        </div>
+        <h2>Send me the free calculator</h2>
+        <p class="lead">Enter your details and we'll email you the download link right away.</p>
+
+        <label for="name">First name</label>
+        <input id="name" name="name" type="text" placeholder="Jamie" required />
+
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" placeholder="you@email.com" required />
+
+        <button type="submit">Email me the free calculator</button>
+        <p class="fineprint">We'll send occasional seller tips. Unsubscribe anytime. No spam.</p>
+      </form>
+
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <div class="grid">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Pick your platform</h3>
+        <p>Choose Etsy, Shopify, Amazon Handmade, eBay, or your own site from the dropdown.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Type in the gold cells</h3>
+        <p>Enter your item cost, sale price, shipping charged, and shipping cost. That's it.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Read your real profit</h3>
+        <p>See net profit, margin, break-even, and a health verdict — green for healthy, red for loss.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="also">
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <h2>What you'll also get</h2>
+        <p>This free calculator is the single-item taster. When you're ready to price a whole line and run the numbers on your entire shop, the full LedgerLane lineup picks up where it leaves off — no pressure, it's there when you want it.</p>
+      </div>
+      <div class="tiers">
+        <div class="tier">
+          <div class="n">Free Profit Calculator<small>Single-item taster — this download</small></div>
+          <div class="p">$0</div>
+        </div>
+        <div class="tier best">
+          <div class="n">Profit &amp; Fee Calculator<small>Adds a 20-product Bulk Calculator</small></div>
+          <div class="p">$12</div>
+        </div>
+        <div class="tier best">
+          <div class="n">Complete Solo Seller Toolkit<small>Every calculator, tracker &amp; checklist</small></div>
+          <div class="p">$39</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">Ledger<span>Lane</span></div>
+    <p class="fine">Practical tools for solo online sellers — spreadsheets, calculators, and checklists that help you price right, track profit, and run your shop like a business.</p>
+    <p class="disc">© LedgerLane. Free single-user sample — for your own business use, not for resale or redistribution. Marketplace fees change often: the calculator ships with published 2026 rates that are fully editable, so always verify current figures against your platform. This tool is for general informational and organizational purposes and is not financial, tax, legal, or accounting advice — confirm any tax figures with a qualified professional.</p>
+  </div>
+</footer>
+
+<script>
+/* Progressive-enhancement handler for the free-calculator capture form.
+   No JS build step, no backend required. See WIRING.md for how to connect
+   an email provider. Graceful fallback: if JS is off, the form posts to its
+   `action` (a real ESP action once you wire one; harmless "#" until then). */
+(function(){
+  var form = document.getElementById('capture-form');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var esp = (form.getAttribute('data-esp-action') || '').trim();
+    var deliver = form.getAttribute('data-deliver') || 'thanks.html';
+    var nameEl = form.querySelector('input[name="name"]');
+    var name = nameEl && nameEl.value ? nameEl.value.trim() : '';
+    /* Send the email to your list in the background — only if you've wired an
+       endpoint. no-cors + fire-and-forget so a slow/blocked ESP never stops
+       the download the visitor was promised. */
+    if(esp){
+      try{ fetch(esp, {method:'POST', mode:'no-cors', body:new FormData(form)}); }
+      catch(err){ /* deliver anyway */ }
+    }
+    /* Always deliver the free file — email 1's promise. */
+    window.location.href = deliver + (name ? ('?name=' + encodeURIComponent(name)) : '');
+  });
+})();
+</script>
+
+</body>
+</html>

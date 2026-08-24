@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Free Etsy &amp; Shopify Profit Calculator — LedgerLane</title>
+<meta name="description" content="Free interactive profit calculator for Etsy, Shopify, Amazon Handmade &amp; eBay sellers. Enter your cost and price to instantly see net profit, true margin, and break-even after every marketplace and payment fee. No signup, works on your phone." />
+<meta name="keywords" content="etsy profit calculator, etsy fee calculator, shopify profit margin calculator, handmade pricing calculator, ecommerce net profit" />
+<link rel="canonical" href="https://wileyklein1.github.io/calculator/" />
+<!-- SEO/OG NOTE: set canonical + og:url to the final hosted URL before deploy.
+     og:image is the sibling hero mockup (deploys beside this file); most scrapers
+     resolve it against og:url. If you host this page at a different path, swap it
+     for an absolute URL to a co-located preview image. -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Free Etsy &amp; Shopify Profit Calculator — LedgerLane" />
+<meta property="og:description" content="Instantly see your real net profit and margin after every Etsy, Shopify, Amazon &amp; eBay fee. Free, no signup, works on mobile." />
+<meta property="og:url" content="https://wileyklein1.github.io/calculator/" />
+<meta property="og:image" content="mockup-1-hero.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Free Etsy &amp; Shopify Profit Calculator — LedgerLane" />
+<meta name="twitter:description" content="Type in your cost and price. See real net profit, margin, and break-even after every fee. Free, no signup." />
+<meta name="twitter:image" content="mockup-1-hero.png" />
+<style>
+  :root{
+    --ink:#1F2A44; --teal:#2FA39B; --gold:#E8B04B; --mist:#F4F6F8;
+    --card:#FFFFFF; --pale-gold:#FFF7E6; --green:#1E7F5C; --red:#C0392B;
+    --amber:#B7791F; --muted:#6B7280; --line:#D6DCE4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--mist);line-height:1.55}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:var(--teal);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* Top bar */
+  header.bar{background:var(--ink);color:#fff}
+  header.bar .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:26px;letter-spacing:.2px}
+  .logo span{color:var(--gold)}
+  header.bar .tag{color:#B9C2D0;font-size:14.5px}
+
+  /* Intro */
+  .intro{background:linear-gradient(180deg,#1F2A44 0%,#26324f 100%);color:#fff;padding:40px 0 34px}
+  .pill{display:inline-block;background:var(--gold);color:var(--ink);font-weight:700;font-size:12.5px;
+    letter-spacing:.5px;border-radius:999px;padding:6px 14px;margin-bottom:16px}
+  .intro h1{font-size:34px;line-height:1.14;margin-bottom:12px;max-width:820px}
+  .intro h1 em{color:var(--gold);font-style:normal}
+  .intro p.sub{font-size:17.5px;color:#C7D0DE;max-width:760px}
+
+  /* Calculator two-column */
+  .calc{padding:34px 0 8px}
+  .calc .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 24px 22px;
+    box-shadow:0 10px 26px rgba(31,42,68,.06)}
+  .panel h2{font-size:19px;margin-bottom:4px}
+  .panel .hint{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+  .field label small{font-weight:400;color:var(--muted)}
+  .field select,.field input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;
+    font-size:15px;font-family:inherit;background:#fff}
+  .field input.money{background:var(--pale-gold);border-color:#EAD8A6}
+  .field select:focus,.field input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(47,163,155,.15)}
+  details.fees{margin-top:6px;border-top:1px solid var(--line);padding-top:12px}
+  details.fees summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--teal);list-style:none}
+  details.fees summary::-webkit-details-marker{display:none}
+  details.fees summary::before{content:"▸ ";color:var(--teal)}
+  details.fees[open] summary::before{content:"▾ "}
+  .feegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .feegrid .field{margin-bottom:0}
+  .feegrid label{font-size:12px}
+  details.fees .note{color:var(--muted);font-size:12px;margin-top:10px}
+
+  /* Results */
+  .res .row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .res .row:last-of-type{border-bottom:none}
+  .res .row .k{color:var(--muted)}
+  .res .row .v{font-variant-numeric:tabular-nums;font-weight:600}
+  .res .row.neg .v{color:var(--red)}
+  .res .sub{font-size:12px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;margin:16px 0 4px}
+  .res .big{display:flex;justify-content:space-between;align-items:baseline;padding:12px 14px;border-radius:12px;
+    background:var(--mist);margin-top:8px}
+  .res .big .k{font-weight:700;font-size:16px}
+  .res .big .v{font-weight:800;font-size:26px;font-variant-numeric:tabular-nums}
+  .verdict{margin-top:16px;border-radius:12px;padding:14px 16px;font-weight:600;font-size:15px;line-height:1.4;
+    border:1.5px solid var(--line);background:#fff}
+  .verdict.loss{border-color:var(--red);background:#FCEEEC;color:var(--red)}
+  .verdict.thin{border-color:#E4C067;background:var(--pale-gold);color:var(--amber)}
+  .verdict.ok{border-color:#9AD3CE;background:#EAF6F5;color:#1a6b64}
+  .verdict.healthy{border-color:#8FD0B4;background:#E9F5EF;color:var(--green)}
+  .verdict.neutral{color:var(--muted)}
+  .verdict .lead{display:block;font-weight:800;font-size:13px;letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px}
+
+  /* Capture + upsell */
+  .also{padding:44px 0 8px}
+  .also .box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px 30px;
+    display:grid;grid-template-columns:1.15fr 1fr;gap:30px;align-items:center}
+  .also h2{font-size:23px;margin-bottom:8px}
+  .also p{color:var(--muted);font-size:15.5px}
+  .also form{margin-top:14px}
+  .also form label{display:block;font-size:13px;font-weight:600;margin:8px 0 5px}
+  .also form input{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font-size:15px;font-family:inherit}
+  .also form input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(47,163,155,.15)}
+  .also form button{margin-top:12px;width:100%;background:var(--gold);color:var(--ink);font-weight:700;font-size:16px;
+    border:none;border-radius:11px;padding:13px;cursor:pointer}
+  .also form button:hover{filter:brightness(1.05)}
+  .also .fineprint{color:var(--muted);font-size:12px;margin-top:9px;text-align:center}
+  .tiers{background:var(--mist);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .tier{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+  .tier:last-child{border-bottom:none}
+  .tier .n{font-weight:600;font-size:15px}
+  .tier .n small{display:block;color:var(--muted);font-weight:400;font-size:12.5px}
+  .tier .p{font-weight:700;font-size:19px}
+  .tier.best .p{color:var(--teal)}
+  .tier .p a{color:inherit}
+
+  /* FAQ */
+  .faq{padding:40px 0 8px;max-width:820px}
+  .faq h2{font-size:23px;margin-bottom:16px}
+  .faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:10px}
+  .faq summary{cursor:pointer;font-weight:600;font-size:16px}
+  .faq details p{color:var(--muted);font-size:14.5px;margin-top:10px}
+
+  /* Footer */
+  footer{background:var(--ink);color:#95A2B8;margin-top:52px;padding:36px 0 30px}
+  footer .logo{color:#fff;margin-bottom:8px}
+  footer .fine{font-size:13.5px;max-width:640px}
+  footer .links{margin:14px 0 2px;font-size:14px}
+  footer .links a{color:#C7D0DE;margin-right:18px}
+  .disc{color:#6f7d97;font-size:12.5px;margin-top:16px;border-top:1px solid #2c3959;padding-top:14px;max-width:820px}
+
+  @media(max-width:880px){
+    .calc .grid,.also .box{grid-template-columns:1fr}
+    .intro h1{font-size:28px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="logo">Ledger<span>Lane</span></div>
+    <div class="tag">Practical tools for solo online sellers</div>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <span class="pill">FREE · NO SIGNUP · WORKS ON MOBILE</span>
+    <h1>Free Etsy &amp; Shopify <em>Profit</em> Calculator</h1>
+    <p class="sub">Type in your cost and price. This tool instantly subtracts every marketplace and payment fee to show your real net profit, true margin, and break-even price — so you never sell at a loss again. Uses the same math as the paid LedgerLane calculator, right in your browser.</p>
+  </div>
+</section>
+
+<section class="calc">
+  <div class="wrap">
+    <div class="grid">
+
+      <!-- INPUTS -->
+      <div class="panel">
+        <h2>Your numbers</h2>
+        <p class="hint">Enter everything per single item. Results update as you type.</p>
+
+        <div class="field">
+          <label for="platform">Selling platform</label>
+          <select id="platform">
+            <option value="Etsy">Etsy</option>
+            <option value="Shopify">Shopify</option>
+            <option value="Amazon Handmade">Amazon Handmade</option>
+            <option value="eBay">eBay</option>
+            <option value="Own Website">Own Website</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cost">Item cost <small>— what you pay to make/buy it</small></label>
+          <input id="cost" class="money" type="number" min="0" step="0.01" value="6.50" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="price">Sale price <small>— item only, not shipping</small></label>
+          <input id="price" class="money" type="number" min="0" step="0.01" value="24.00" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="shipCharged">Shipping you charge the buyer</label>
+          <input id="shipCharged" class="money" type="number" min="0" step="0.01" value="5.00" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="shipCost">Your actual shipping cost</label>
+          <input id="shipCost" class="money" type="number" min="0" step="0.01" value="4.20" inputmode="decimal" />
+        </div>
+        <div class="field">
+          <label for="other">Other cost per item <small>— packaging, etc.</small></label>
+          <input id="other" class="money" type="number" min="0" step="0.01" value="0.75" inputmode="decimal" />
+        </div>
+
+        <details class="fees">
+          <summary>Adjust fee rates (published 2026 defaults)</summary>
+          <div class="feegrid">
+            <div class="field"><label for="fTxn">Transaction %</label><input id="fTxn" type="number" min="0" step="0.001" inputmode="decimal" /></div>
+            <div class="field"><label for="fPay">Payment %</label><input id="fPay" type="number" min="0" step="0.001" inputmode="decimal" /></div>
+            <div class="field"><label for="fFixed">Payment fixed $</label><input id="fFixed" type="number" min="0" step="0.01" inputmode="decimal" /></div>
+            <div class="field"><label for="fListing">Listing fee $</label><input id="fListing" type="number" min="0" step="0.01" inputmode="decimal" /></div>
+            <div class="field"><label for="fOffsite">Offsite/ads %</label><input id="fOffsite" type="number" min="0" step="0.001" inputmode="decimal" /></div>
+          </div>
+          <p class="note">Fees change often. Defaults load from your platform choice; edit any cell to match your current rates. Etsy Offsite Ads (12–15%) only apply to sales Etsy sources through its ads — leave 0 unless you know a sale came from Offsite Ads.</p>
+        </details>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="panel res">
+        <h2>Your bottom line</h2>
+        <p class="hint">Per single sale, after all fees.</p>
+
+        <div class="sub">Fee breakdown</div>
+        <div class="row"><span class="k">Gross collected (price + shipping)</span><span class="v" id="rGross">$0.00</span></div>
+        <div class="row neg"><span class="k">Transaction fee</span><span class="v" id="rTxn">$0.00</span></div>
+        <div class="row neg"><span class="k">Payment processing fee</span><span class="v" id="rPay">$0.00</span></div>
+        <div class="row neg"><span class="k">Listing fee</span><span class="v" id="rListing">$0.00</span></div>
+        <div class="row neg"><span class="k">Offsite / ads fee</span><span class="v" id="rOffsite">$0.00</span></div>
+        <div class="row neg"><span class="k"><b>Total fees</b></span><span class="v" id="rFees">$0.00</span></div>
+        <div class="row neg"><span class="k">Your costs (item + shipping + other)</span><span class="v" id="rCosts">$0.00</span></div>
+
+        <div class="big"><span class="k">Net profit per sale</span><span class="v" id="rNet">$0.00</span></div>
+
+        <div class="row" style="margin-top:8px"><span class="k">Profit margin</span><span class="v" id="rMargin">0%</span></div>
+        <div class="row"><span class="k">Markup on cost</span><span class="v" id="rMarkup">0%</span></div>
+        <div class="row"><span class="k">Break-even sale price</span><span class="v" id="rBreakeven">$0.00</span></div>
+
+        <div class="verdict neutral" id="verdict"><span class="lead">Health check</span>Enter a sale price to begin.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CAPTURE + UPSELL -->
+<section class="also">
+  <div class="wrap">
+    <div class="box">
+      <div>
+        <h2>Price your whole shop, not one item</h2>
+        <p>This free calculator does one item at a time. Get the downloadable spreadsheet version free — it saves your numbers, and the paid LedgerLane tools add a 20-product bulk calculator, profit dashboards, and trackers for your entire shop.</p>
+
+        <!-- Same zero-backend funnel as the lead-magnet page: on submit, deliver
+             the free .xlsx via thanks.html; if data-esp-action is wired, also
+             POST the email to your list in the background. See WIRING.md. -->
+        <form id="capture-form" method="post" action="#" data-esp-action="" data-deliver="thanks.html">
+          <label for="cname">First name</label>
+          <input id="cname" name="name" type="text" placeholder="Jamie" required />
+          <label for="cemail">Email address</label>
+          <input id="cemail" name="email" type="email" placeholder="you@email.com" required />
+          <button type="submit">Email me the free spreadsheet</button>
+          <p class="fineprint">Occasional seller tips. Unsubscribe anytime. No spam.</p>
+        </form>
+      </div>
+      <div class="tiers">
+        <div class="tier">
+          <div class="n">This web calculator<small>Single item, in your browser</small></div>
+          <div class="p">$0</div>
+        </div>
+        <div class="tier best">
+          <div class="n">Profit &amp; Fee Calculator<small>Adds a 20-product bulk calculator</small></div>
+          <!-- go-live: replace href with the live Gumroad URL for this SKU -->
+          <div class="p"><a href="https://wileyklein.gumroad.com/l/bwxdq" data-sku="profit-fee-calculator">$12</a></div>
+        </div>
+        <div class="tier best">
+          <div class="n">Complete Solo Seller Toolkit<small>Every calculator, tracker &amp; checklist</small></div>
+          <div class="p"><a href="https://wileyklein.gumroad.com/l/xtvdjw" data-sku="complete-solo-seller-toolkit">$39</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ (also feeds the JSON-LD FAQPage below — keep questions/answers in sync) -->
+<section class="faq">
+  <div class="wrap">
+    <h2>Common questions</h2>
+    <details>
+      <summary>How accurate is this profit calculator?</summary>
+      <p>It uses each platform's published 2026 fee structure — Etsy's 6.5% transaction fee, 3% + $0.25 payment processing, and $0.20 listing fee, and the equivalent rates for Shopify, Amazon Handmade, eBay, and your own website. You can edit any rate under "Adjust fee rates" to match your exact plan. Always confirm current fees with your platform, since they change.</p>
+    </details>
+    <details>
+      <summary>Does it include shipping in the fee math?</summary>
+      <p>Yes. On Etsy and eBay the marketplace charges fees on the shipping you collect too, so the calculator applies fees to price <em>plus</em> shipping charged, then subtracts your actual shipping cost separately. That's why your net profit is often lower than a simple "price minus cost" estimate.</p>
+    </details>
+    <details>
+      <summary>What margin should I aim for?</summary>
+      <p>For handmade and small-batch products, aim for 35%+ net margin so promotions, returns, and ads don't wipe out your profit. Under 15% is thin and risky. This is general guidance, not financial advice.</p>
+    </details>
+    <details>
+      <summary>Is my data saved or sent anywhere?</summary>
+      <p>No. The calculator runs entirely in your browser — nothing you type is stored or transmitted. If you enter your email to get the free spreadsheet, that's the only thing shared, and only then.</p>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">Ledger<span>Lane</span></div>
+    <p class="fine">Practical tools for solo online sellers — spreadsheets, calculators, and checklists that help you price right, track profit, and run your shop like a business.</p>
+    <p class="links"><a href="/free/">Free spreadsheet download</a></p>
+    <p class="disc">© LedgerLane. This calculator is a free tool for general informational and organizational purposes and is not financial, tax, legal, or accounting advice. Marketplace fees change often; the tool ships with published 2026 rates that are fully editable, so always verify current figures against your platform. Confirm any tax or accounting figures with a qualified professional.</p>
+  </div>
+</footer>
+
+<!-- Structured data: WebApplication + FAQPage (mirrors the visible FAQ above) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"LedgerLane Free Profit Calculator","applicationCategory":"BusinessApplication","operatingSystem":"Any (web browser)","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free interactive profit calculator for Etsy, Shopify, Amazon Handmade and eBay sellers — shows net profit, margin, and break-even after every marketplace and payment fee.","publisher":{"@type":"Organization","name":"LedgerLane"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How accurate is this profit calculator?","acceptedAnswer":{"@type":"Answer","text":"It uses each platform's published 2026 fee structure — Etsy's 6.5% transaction fee, 3% + $0.25 payment processing, and $0.20 listing fee, and the equivalent rates for Shopify, Amazon Handmade, eBay, and your own website. You can edit any rate to match your exact plan. Always confirm current fees with your platform, since they change."}},{"@type":"Question","name":"Does it include shipping in the fee math?","acceptedAnswer":{"@type":"Answer","text":"Yes. On Etsy and eBay the marketplace charges fees on the shipping you collect too, so the calculator applies fees to price plus shipping charged, then subtracts your actual shipping cost separately."}},{"@type":"Question","name":"What margin should I aim for?","acceptedAnswer":{"@type":"Answer","text":"For handmade and small-batch products, aim for 35%+ net margin so promotions, returns, and ads don't wipe out your profit. Under 15% is thin and risky. This is general guidance, not financial advice."}},{"@type":"Question","name":"Is my data saved or sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. The calculator runs entirely in your browser — nothing you type is stored or transmitted. If you enter your email to get the free spreadsheet, that is the only thing shared, and only then."}}]}
+</script>
+
+<script>
+/* ============================================================
+   LedgerLane free profit calculator — pure vanilla JS, no deps.
+   Fee model + verdict thresholds mirror the paid Profit & Fee
+   Calculator workbook EXACTLY (products/profit-fee-calculator/build.py):
+     gross      = price + shipCharged
+     txnFee     = gross * txn%
+     payFee     = gross * pay% + fixed$
+     listingFee = listing$
+     offsiteFee = gross * offsite%
+     net        = gross - (txn+pay+listing+offsite) - (cost+shipCost+other)
+     margin     = net / gross
+     markup     = net / (cost+shipCost+other)
+     breakeven  = (cost+shipCost+other+fixed+listing)/(1-txn-pay-offsite) - shipCharged
+   Verified against the workbook's hand-checked sample:
+     Etsy 6.50 / 24.00 / 5.00 / 4.20 / 0.75  ->  net $14.345, 49.5%, break-even $8.15
+   ============================================================ */
+(function(){
+  var FEES = {
+    "Etsy":            {txn:0.065, pay:0.03,  fixed:0.25, listing:0.20, offsite:0.0},
+    "Shopify":         {txn:0.0,   pay:0.029, fixed:0.30, listing:0.0,  offsite:0.0},
+    "Amazon Handmade": {txn:0.15,  pay:0.0,   fixed:0.0,  listing:0.0,  offsite:0.0},
+    "eBay":            {txn:0.135, pay:0.0,   fixed:0.30, listing:0.0,  offsite:0.0},
+    "Own Website":     {txn:0.0,   pay:0.029, fixed:0.30, listing:0.0,  offsite:0.0}
+  };
+  var $ = function(id){ return document.getElementById(id); };
+  var num = function(el){ var v = parseFloat(el.value); return isNaN(v) ? 0 : v; };
+  var money = function(n){ return (n<0?"-$":"$") + Math.abs(n).toFixed(2); };
+  var pct = function(n){ return Math.round(n*100) + "%"; };
+
+  var feeInputs = {txn:$("fTxn"), pay:$("fPay"), fixed:$("fFixed"), listing:$("fListing"), offsite:$("fOffsite")};
+
+  /* Load a platform's published defaults into the editable fee inputs (as %). */
+  function loadFeeDefaults(){
+    var f = FEES[$("platform").value] || FEES.Etsy;
+    feeInputs.txn.value     = +(f.txn*100).toFixed(3);
+    feeInputs.pay.value     = +(f.pay*100).toFixed(3);
+    feeInputs.fixed.value   = f.fixed.toFixed(2);
+    feeInputs.listing.value = f.listing.toFixed(2);
+    feeInputs.offsite.value = +(f.offsite*100).toFixed(3);
+  }
+  /* Read the (possibly user-edited) fee inputs back into decimals. */
+  function currentFee(){
+    return {
+      txn:     num(feeInputs.txn)/100,
+      pay:     num(feeInputs.pay)/100,
+      fixed:   num(feeInputs.fixed),
+      listing: num(feeInputs.listing),
+      offsite: num(feeInputs.offsite)/100
+    };
+  }
+
+  function recalc(){
+    var cost = num($("cost")), price = num($("price")),
+        shipCharged = num($("shipCharged")), shipCost = num($("shipCost")), other = num($("other"));
+    var f = currentFee();
+
+    var gross      = price + shipCharged;
+    var txnFee     = gross * f.txn;
+    var payFee     = gross * f.pay + f.fixed;
+    var listingFee = f.listing;
+    var offsiteFee = gross * f.offsite;
+    var totalFees  = txnFee + payFee + listingFee + offsiteFee;
+    var totalCosts = cost + shipCost + other;
+    var net        = gross - totalFees - totalCosts;
+    var margin     = gross === 0 ? 0 : net / gross;
+    var markup     = totalCosts === 0 ? 0 : net / totalCosts;
+    var denom      = 1 - f.txn - f.pay - f.offsite;
+    var breakeven  = denom <= 0 ? NaN : (totalCosts + f.fixed + f.listing) / denom - shipCharged;
+
+    $("rGross").textContent    = money(gross);
+    $("rTxn").textContent      = money(-txnFee);
+    $("rPay").textContent      = money(-payFee);
+    $("rListing").textContent  = money(-listingFee);
+    $("rOffsite").textContent  = money(-offsiteFee);
+    $("rFees").textContent     = money(-totalFees);
+    $("rCosts").textContent    = money(-totalCosts);
+    $("rNet").textContent      = money(net);
+    $("rMargin").textContent   = pct(margin);
+    $("rMarkup").textContent   = pct(markup);
+    $("rBreakeven").textContent= isNaN(breakeven) ? "—" : money(breakeven);
+
+    /* Net profit color mirrors the workbook's conditional formatting. */
+    $("rNet").style.color = (gross>0 && net<0) ? "var(--red)" : (net>0 ? "var(--green)" : "var(--ink)");
+
+    /* Health verdict — identical thresholds to the workbook. */
+    var v = $("verdict"), cls = "verdict ", lead = "Health check", body;
+    if(gross === 0){
+      cls += "neutral"; body = "Enter a sale price to begin.";
+    } else if(net < 0){
+      cls += "loss"; lead = "Loss"; body = "You lose " + money(-net) + " on every sale. Raise your price or cut your cost.";
+    } else if(margin < 0.15){
+      cls += "thin"; lead = "Thin"; body = pct(margin) + " margin. Under 15% leaves no room for returns or ads.";
+    } else if(margin < 0.35){
+      cls += "ok"; lead = "OK"; body = pct(margin) + " margin. Solid for most handmade goods.";
+    } else {
+      cls += "healthy"; lead = "Healthy"; body = pct(margin) + " margin. Strong — consider scaling this product.";
+    }
+    v.className = cls;
+    v.innerHTML = '<span class="lead"></span>';
+    v.querySelector(".lead").textContent = lead;
+    v.appendChild(document.createTextNode(body));
+  }
+
+  /* Wire events. */
+  $("platform").addEventListener("change", function(){ loadFeeDefaults(); recalc(); });
+  ["cost","price","shipCharged","shipCost","other"].forEach(function(id){
+    $(id).addEventListener("input", recalc);
+  });
+  Object.keys(feeInputs).forEach(function(k){ feeInputs[k].addEventListener("input", recalc); });
+
+  loadFeeDefaults();
+  recalc();
+
+  /* ---- Email capture: same zero-backend funnel as index.html ---- */
+  var form = $("capture-form");
+  if(form){
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var esp = (form.getAttribute("data-esp-action") || "").trim();
+      var deliver = form.getAttribute("data-deliver") || "thanks.html";
+      var nameEl = form.querySelector('input[name="name"]');
+      var name = nameEl && nameEl.value ? nameEl.value.trim() : "";
+      if(esp){
+        try{ fetch(esp, {method:"POST", mode:"no-cors", body:new FormData(form)}); }
+        catch(err){ /* deliver anyway */ }
+      }
+      window.location.href = deliver + (name ? ("?name=" + encodeURIComponent(name)) : "");
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
