@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://wileyklein1.github.io/blog/sitemap.xml
+Sitemap: https://wileyklein1.github.io/sitemap.xml
